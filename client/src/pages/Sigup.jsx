@@ -32,7 +32,7 @@ export default function Sigup() {
             </form>
             <div className="flex gap-2 text-sm mt-5">
               <span>Have an account ?</span>
-              <Link to='/Singnin' className="text-blue-500" >
+              <Link to='/Sign-in' className="text-blue-500" >
               Sign in</Link>
             </div>
         </div>
