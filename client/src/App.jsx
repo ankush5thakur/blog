@@ -7,6 +7,7 @@ import Sigup from './pages/Sigup';
 import Singnin from './pages/Singnin';
 import Project from './pages/Projects';  
 import Header from './components/Header.jsx';
+import  Footer  from './components/Footer.jsx';
 export default function App() {
   return (
     <BrowserRouter>
@@ -19,6 +20,7 @@ export default function App() {
         <Route path='/sign-up' element={<Sigup />} />
         <Route path='/sign-in' element={<Singnin />} />
       </Routes>
+      <Footer/>
     </BrowserRouter>
   );
 }
