@@ -3,6 +3,7 @@ import User from "../models/user.model.js";
 import bcryptjs from 'bcryptjs';
 import { errorHandler } from "../utills/error.js";
 import jwt from "jsonwebtoken";
+import { json } from "express";
 export const signup = async (req, res,next) => {
     console.log(req.body)
     // res.send("hahahah")
@@ -61,6 +62,42 @@ export const signin=async (req,res,next)=>{
         
 
     } catch (error) {
+        
+    }
+}
+
+
+export const google=async(req,res,next)=>{
+    const {email,name,googlePhotoUrl}=req.body
+    try {
+        const user=await User.findOne({email})
+        if(user){
+            const token=jwt.sign({id:user._id},process.env.JWT_SECRET)
+            const {password,...rest}=user.doc;
+            res.status(200).cookie('access_token',token,{
+                httpOnly:true
+            }).json(rest)
+        }
+else{
+    const generstedPassword=Math.random().toString(36).slice(-8)+Math.random().toString(36).slice(-8)
+    const hashedPassword=bcryptjs.hashSync(generstedPassword,10)
+    const newUser=new User({
+        username:name.toLowerCase().split(' ').join('')+Math.random.toString(9).split(-4),
+        email,
+        password:hashedPassword,
+       profilePicture: googlePhotoUrl,
+    })
+    await newUser.save()
+
+    const token=jwt.sign({id:newUser._id},process.env.JWT_SECRET)
+    const {password,...rest}=newUser.doc;
+    res.status(200).cookie('access_token',token,{
+        httpOnly:true
+    }).json(rest)
+
+}
+    } catch (error) {
+        next(error)
         
     }
 }
